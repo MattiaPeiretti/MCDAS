@@ -1,6 +1,8 @@
 from settingsHandler import SettingsHandler
 from mcd_interface import MCDInterface
 from dataHandler import dataHandler
+import numpy as np
+
 
 LAT_MARGINS = [-90, 90] 
 LON_MARGINS = [0, 360] 
@@ -18,6 +20,6 @@ if __name__ == "__main__":
     slon_step = settings_handler.get_setting("SLON_STEP")
 
 
-    for slon in range(0, 360 + slon_step, slon_step):
+    for slon in np.arange(0, 360 + slon_step, slon_step):
         data = data_hander.collect_data(slon, LAT_MARGINS, LON_MARGINS, record_type)
         data_hander.write_database_slon_record(record_type, slon, data)

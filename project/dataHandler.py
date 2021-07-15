@@ -2,7 +2,7 @@ from mcd_interface import MCDInterface
 from settingsHandler import SettingsHandler
 import csv
 import os
-
+import numpy as np
 
 def add_value_to_dict(dict, lat, lon, value):
     if lat in dict.keys():
@@ -33,21 +33,21 @@ class dataHandler():
         lat_step = self.settings_handler.get_setting("LAT_STEP")
         lon_step = self.settings_handler.get_setting("LON_STEP")
 
-        for lat in range(lat_margins[0], lat_margins[1] + lat_step, lat_step):
+        for lat in np.arange(lat_margins[0], lat_margins[1] + lat_step, lat_step):
 
             # If currently checking the poles, we will assign the data of one point to the whole scale.
             if lat == lat_margins[0] or lat == lat_margins[1]:
 
                 current_value = self.mcd_interface.do_query(slon, record_type, [lat, 180])
 
-                for lon in range(lon_margins[0], lon_margins[1] + lon_step, lon_step):
+                for lon in np.arange(lon_margins[0], lon_margins[1] + lon_step, lon_step):
                     data = add_value_to_dict(data, lat, lon, current_value)
 
                   
                     print_data(slon, lat, lon, current_value, lat_margins, lon_margins)
                 continue
 
-            for lon in range(lon_margins[0], lon_margins[1] + lon_step, lon_step):
+            for lon in np.arange(lon_margins[0], lon_margins[1] + lon_step, lon_step):
                 current_value = self.mcd_interface.do_query(slon, record_type, [lat, lon])
 
                 data = add_value_to_dict(data, lat, lon, current_value)

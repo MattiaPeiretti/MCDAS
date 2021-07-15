@@ -10,9 +10,9 @@ SETTINGS = {
     "RECORDS_FILENAME_NUMBERS_PADDING": 3,
     #"RECORD_TYPE": "tsurfmn",
     "RECORD_TYPE": "tsurfmx",
-    "SLON_STEP": 90,
-    "LAT_STEP": 30,
-    "LON_STEP": 90,
+    "SLON_STEP": 15,
+    "LAT_STEP": 0.25,
+    "LON_STEP": 0.25,
 }
 
 class SettingsHandler():
