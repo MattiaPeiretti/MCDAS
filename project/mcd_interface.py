@@ -9,6 +9,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+from settingsHandler import SettingsHandler
+
 def find_number_in_string(string):
     numbers = []
     print(string)
@@ -43,6 +45,8 @@ class MCDInterface():
 
 if __name__ == "__main__":
     
-    interface = MCDInterface("http://www-mars.lmd.jussieu.fr/mcd_python/cgi-bin/mcdcgi.py")
+    settings_handler = SettingsHandler()
+
+    interface = MCDInterface(settings_handler.get_setting("MCD_BASELINK"))
 
     print(interface.do_query(56, "tsurfmn",[45, 16]))
