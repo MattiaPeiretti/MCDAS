@@ -1,6 +1,5 @@
 import os
 
-
 # Print iterations progress
 def generateProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 25, fill = '█', printEnd = "\r"):
     """
@@ -28,21 +27,21 @@ def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 class GUI():
-    def __init__(self, name, lat_margins, lon_margins):
+    def __init__(self, name, lat_margins=None, lon_margins=None):
         self.name = name
         self.lat_margins = lat_margins
         self.lon_margins = lon_margins
 
     def update(self, slon, lat, lon, current_value):
-        lat_range = abs(self.lat_margins[0]) + abs(self.lat_margins[1])
+        lat_range = self.lat_margins[1] - self.lat_margins[0]
         
-        lon_range = abs(self.lon_margins[0]) + abs(self.lon_margins[1])
-
-        screen_width = 50
+        lon_range = self.lon_margins[1] - self.lon_margins[0]
 
         slon_percentage = round(100*(abs(slon)/360), 2)
-        lat_percentage = round(100*(abs(lat)/lat_range), 2)
-        lon_percentage = round(100*(abs(lon)/lon_range), 2)
+
+        lat_percentage = round(100*((lat - self.lat_margins[0])/lat_range), 2)
+        
+        lon_percentage = round(100*((lon - self.lon_margins[0])/lon_range), 2)
         screen = f"""
 +===================================================+
                                                     
@@ -52,16 +51,30 @@ class GUI():
    -> {generateProgressBar(slon, 360)}              
                                                     
   Latitude: {lat_percentage}%                       
-   -> {generateProgressBar(lat, lat_range)}         
+   -> {generateProgressBar(lat - self.lat_margins[0], lat_range)}         
                                                     
   Longitude: {lon_percentage}%                      
-   -> {generateProgressBar(lon, lon_range)}         
+   -> {generateProgressBar(lon - self.lon_margins[0], lon_range)}         
                                                     
   Current Solar Longitude: {slon}                   
   Current latitude: {lat} / { self.lat_margins[1]}  
   Current longitude: {lon} / { self.lon_margins[1]} 
   Current Value: {current_value}                    
                                                    
++===================================================+
+        """
+        
+        cls()
+        print(screen)
+
+    def display_error(self, error_name, error):
+        screen = f"""
++===================================================+
+                                                    
+  {error_name}
+
+  {error}
+                                                                                                                          
 +===================================================+
         """
         
