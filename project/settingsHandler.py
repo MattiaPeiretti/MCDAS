@@ -9,13 +9,13 @@ SETTINGS = {
     "MCD_BASELINK": "http://www-mars.lmd.jussieu.fr/mcd_python/cgi-bin/mcdcgi.py",
     "RECORDS_FILENAME_NUMBERS_PADDING": 3,
     #"RECORD_TYPE": "tsurfmn",
-    "RECORD_TYPE": "tsurfmx",
-    "SLON_STEP": 15,
-    "LAT_STEP": 5.0,
-    "LON_STEP": 10.0,
-    "REQUEST_RETRY_WAITTIME": 10,
-    "REQUEST_RETRY_AMOUNT": 5,
-    "REQUEST_ERROR_CHARACTER": "0"
+    "RECORD_TYPE": "tsurfmx", #Database variable 
+    "SLON_STEP": 15,                    # Solar longitude step 15
+    "LAT_STEP": 5.0,                    # Latitude step 5
+    "LON_STEP": 2.5,                    # Longitude 2.5
+    "REQUEST_RETRY_AMOUNT": 5,          # Amount of retries on request error
+    "REQUEST_RETRY_WAITTIME": 10,       # Delay between requests retries 10 secs
+    "REQUEST_ERROR_CHARACTER": "0"      # Character to return instead if request retries should fail "ERROR"
 }
 
 class SettingsHandler():
