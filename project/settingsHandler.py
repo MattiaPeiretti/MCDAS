@@ -11,8 +11,11 @@ SETTINGS = {
     #"RECORD_TYPE": "tsurfmn",
     "RECORD_TYPE": "tsurfmx",
     "SLON_STEP": 15,
-    "LAT_STEP": 0.25,
-    "LON_STEP": 0.25,
+    "LAT_STEP": 5.0,
+    "LON_STEP": 10.0,
+    "REQUEST_RETRY_WAITTIME": 10,
+    "REQUEST_RETRY_AMOUNT": 5,
+    "REQUEST_ERROR_CHARACTER": "0"
 }
 
 class SettingsHandler():
