@@ -1,5 +1,6 @@
 from mcd_interface import MCDInterface
 from settingsHandler import SettingsHandler
+import consoleGUI
 import csv
 import os
 import numpy as np
@@ -13,45 +14,49 @@ def add_value_to_dict(dict, lat, lon, value):
         dict[lat] = {lon:  value}
     return dict
 
-def print_data(slon, lat, lon, value, lat_margins, lon_margins):
-    print(f"Solar Longitude: {slon} Total Work: {100*(slon/360)}%, Latitude: {lat} Total Work: {100*((lat+90)/(lat_margins[1]+90))}%, Longitude: {lon} Total Work: {100*(lon/lon_margins[1])}%, Current Value: {value}",  end='\r')
-        
+def print_data(GUI, slon, lat, lon, current_value):
+    #print(f"Solar Longitude: {slon} Total Work: {100*(slon/360)}%, Latitude: {lat} Total Work: {100*((lat+90)/(lat_margins[1]+90))}%, Longitude: {lon} Total Work: {100*(lon/lon_margins[1])}%, Current Value: {value}",  end='\r')
+    GUI.update(slon, lat, lon, current_value)
 
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 class dataHandler():
-    def __init__(self, dir_path, settings_handler, mcd_interface):
+    def __init__(self, dir_path, settings_handler, mcd_interface, lat_margins, lon_margins):
         self.dir_path = dir_path
         self.settings_handler = settings_handler
         self.mcd_interface = mcd_interface
+        self.lat_margins = lat_margins
+        self.lon_margins = lon_margins
 
-    def collect_data(self, slon, lat_margins, lon_margins, record_type):
+        self.gui = consoleGUI.GUI("Mars Climate Database Augmented Software:", lat_margins, lon_margins)
+
+    def collect_data(self, slon, record_type):
 
         data = {}
 
         lat_step = self.settings_handler.get_setting("LAT_STEP")
         lon_step = self.settings_handler.get_setting("LON_STEP")
 
-        for lat in np.arange(lat_margins[0], lat_margins[1] + lat_step, lat_step):
+        for lat in np.arange(self.lat_margins[0], self.lat_margins[1] + lat_step, lat_step):
 
             # If currently checking the poles, we will assign the data of one point to the whole scale.
-            if lat == lat_margins[0] or lat == lat_margins[1]:
+            if lat == self.lat_margins[0] or lat == self.lat_margins[1]:
 
                 current_value = self.mcd_interface.do_query(slon, record_type, [lat, 180])
 
-                for lon in np.arange(lon_margins[0], lon_margins[1] + lon_step, lon_step):
+                for lon in np.arange(self.lon_margins[0], self.lon_margins[1] + lon_step, lon_step):
                     data = add_value_to_dict(data, lat, lon, current_value)
 
                   
-                    print_data(slon, lat, lon, current_value, lat_margins, lon_margins)
+                    print_data(self.gui, slon, lat, lon, current_value)
                 continue
 
-            for lon in np.arange(lon_margins[0], lon_margins[1] + lon_step, lon_step):
+            for lon in np.arange(self.lon_margins[0], self.lon_margins[1] + lon_step, lon_step):
                 current_value = self.mcd_interface.do_query(slon, record_type, [lat, lon])
 
                 data = add_value_to_dict(data, lat, lon, current_value)
-                print_data(slon, lat, lon, current_value, lat_margins, lon_margins)
+                print_data(self.gui, slon, lat, lon, current_value)
                 
         return data
 
