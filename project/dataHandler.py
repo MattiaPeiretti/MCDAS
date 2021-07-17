@@ -1,7 +1,7 @@
 from mcd_interface import MCDInterface
 from settingsHandler import SettingsHandler
 import consoleGUI
-
+from tqdm import tqdm
 
 import re
 import csv
@@ -26,6 +26,7 @@ class dataHandler():
         self.lat_margins = lat_margins
         self.lon_margins = lon_margins
         self.data = {}
+        
 
         self.gui = consoleGUI.GUI("Mars Climate Database Augmented Software:", lat_margins, lon_margins)
 
@@ -53,18 +54,19 @@ class dataHandler():
         
         requests = self.prepare_data(slon, record_type)
         #Creating mp pool
-        pool = multiprocessing.Pool()
-        result = pool.map(self.download_worker, requests)
-        pool.close()
-        pool.join()
+        # pool = multiprocessing.Pool()
+        # result = pool.map(self.download_worker, requests)
+        
+        with multiprocessing.Pool() as p:
+            print(f"Current Solar Longitude: {slon} - Total work: {100*(slon/360)}%\n")
+            result = list(tqdm(p.imap(self.download_worker, requests), total=len(requests)))
+            consoleGUI.cls()
 
         for item in result:
             lat, lon, value = item
             if abs(lat) == 90:
                 for step in np.arange(self.lon_margins[0], self.lon_margins[1]+self.settings_handler.get_setting("LON_STEP"), self.settings_handler.get_setting("LON_STEP")):
                     self.add_value_to_dict(lat, step, value)
-
-            print(self.data)
             self.add_value_to_dict(lat, lon, value)
             
 
@@ -82,7 +84,6 @@ class dataHandler():
     def download_worker(self, data):
         lat, lon, uri = data
         current_value = self.mcd_interface.do_direct_query(uri)
-        print(lat, lon, current_value)
         return (lat, lon, current_value)
 
     def write_database_slon_record(self, record_type, slon, db_dict):
