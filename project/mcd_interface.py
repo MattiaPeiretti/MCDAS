@@ -29,19 +29,13 @@ class MCDInterface():
         self.gui = consoleGUI.GUI("Error")
 
     def do_query(self, slon, variable, coordinates):
-        lat = coordinates[0]
-        lon = coordinates[1]
-        alt = 0
 
-        # FIX LATER!!
-        # if not coordinates[2]:
-        #     alt = 0
-        # else:
-        #     alt = coordinates[2]
-        request_URI = f"{self.base_link}?ls={slon}&latitude={lat}&longitude={lon}&altitude={alt}&zkey=3&isfixedlt=on&dust=1&hrkey=1&zonmean=on&var1={variable}&var2=none&var3=none&var4=none&dpi=80&islog=off&colorm=jet&minval=&maxval=&proj=cyl&plat=&plon=&trans=&iswind=off&latpoint=&lonpoint="
-        
+        request_URI = self.get_query_URI(slon, variable, coordinates)
+        return self.do_direct_query(request_URI)
+
+    def do_direct_query(self, URI):
         try:
-            response = requests.get(request_URI)
+            response = requests.get(URI)
             if not response.status_code == 200:
                 raise Exception()
         except:
@@ -49,7 +43,7 @@ class MCDInterface():
                 self.gui.display_error("Request Error Occured", f"Trying to connect again: try {try_nr} of {self.settings_handler.get_setting('REQUEST_RETRY_AMOUNT')}")
                 time.sleep(self.settings_handler.get_setting("REQUEST_RETRY_WAITTIME"))
                 try:
-                    response = requests.get(request_URI)
+                    response = requests.get(URI)
                     break
                 except:
                     pass
@@ -61,6 +55,17 @@ class MCDInterface():
 
         return float(re.findall("\d+\.\d+", value)[0])
 
+    def get_query_URI(self, slon, variable, coordinates):
+        lat = coordinates[0]
+        lon = coordinates[1]
+        alt = 0
+
+        # FIX LATER!!
+        # if not coordinates[2]:
+        #     alt = 0
+        # else:
+        #     alt = coordinates[2]
+        return f"{self.base_link}?ls={slon}&latitude={lat}&longitude={lon}&altitude={alt}&zkey=3&isfixedlt=on&dust=1&hrkey=1&zonmean=on&var1={variable}&var2=none&var3=none&var4=none&dpi=80&islog=off&colorm=jet&minval=&maxval=&proj=cyl&plat=&plon=&trans=&iswind=off&latpoint=&lonpoint="
 
 if __name__ == "__main__":
     

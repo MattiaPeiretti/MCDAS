@@ -6,17 +6,17 @@ import sys
 
 if __name__ == "__main__":
 
-    try:
-        if not sys.argv[1] and not sys.argv[2]:
-            LAT_MARGINS = [-90, 90] 
-        if not sys.argv[3] and not sys.argv[4]:
-            LON_MARGINS = [0, 360]
-    except ValueError:
-        pass
-    else:
-        LAT_MARGINS = [float(sys.argv[1]), float(sys.argv[2])] 
-        LON_MARGINS = [float(sys.argv[3]), float(sys.argv[4])] 
+    LAT_MARGINS = [-90, 90] 
+    LON_MARGINS = [0, 360] 
 
+    try:
+        if sys.argv[1] and sys.argv[2]:
+            LAT_MARGINS = [float(sys.argv[1]), float(sys.argv[2])] 
+        if sys.argv[3] and sys.argv[4]:
+            LON_MARGINS = [float(sys.argv[3]), float(sys.argv[4])]
+    except IndexError:
+        pass
+        
     settings_handler = SettingsHandler()
     mcd_interface = MCDInterface(settings_handler.get_setting("MCD_BASELINK"))
     data_hander = dataHandler("../output/", settings_handler, mcd_interface, LAT_MARGINS, LON_MARGINS)

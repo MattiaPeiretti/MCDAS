@@ -1,18 +1,15 @@
 from mcd_interface import MCDInterface
 from settingsHandler import SettingsHandler
 import consoleGUI
+
+
+import re
 import csv
 import os
 import numpy as np
+import time
+import multiprocessing
 
-def add_value_to_dict(dict, lat, lon, value):
-    if lat in dict.keys():
-        dictdata = dict[lat]
-        dictdata[lon] = value
-        dict[lat] = dictdata
-    else:
-        dict[lat] = {lon:  value}
-    return dict
 
 def print_data(GUI, slon, lat, lon, current_value):
     #print(f"Solar Longitude: {slon} Total Work: {100*(slon/360)}%, Latitude: {lat} Total Work: {100*((lat+90)/(lat_margins[1]+90))}%, Longitude: {lon} Total Work: {100*(lon/lon_margins[1])}%, Current Value: {value}",  end='\r')
@@ -28,12 +25,12 @@ class dataHandler():
         self.mcd_interface = mcd_interface
         self.lat_margins = lat_margins
         self.lon_margins = lon_margins
+        self.data = {}
 
         self.gui = consoleGUI.GUI("Mars Climate Database Augmented Software:", lat_margins, lon_margins)
 
-    def collect_data(self, slon, record_type):
-
-        data = {}
+    def prepare_data(self, slon, record_type):
+        requests = []
 
         lat_step = self.settings_handler.get_setting("LAT_STEP")
         lon_step = self.settings_handler.get_setting("LON_STEP")
@@ -42,24 +39,51 @@ class dataHandler():
 
             # If currently checking the poles, we will assign the data of one point to the whole scale.
             if lat == self.lat_margins[0] or lat == self.lat_margins[1]:
-
-                current_value = self.mcd_interface.do_query(slon, record_type, [lat, 180])
-
-                for lon in np.arange(self.lon_margins[0], self.lon_margins[1] + lon_step, lon_step):
-                    data = add_value_to_dict(data, lat, lon, current_value)
-
-                  
-                    print_data(self.gui, slon, lat, lon, current_value)
+                
+                requests.append((lat, 180, self.mcd_interface.get_query_URI(slon, record_type, [lat, 180])))
                 continue
 
             for lon in np.arange(self.lon_margins[0], self.lon_margins[1] + lon_step, lon_step):
-                current_value = self.mcd_interface.do_query(slon, record_type, [lat, lon])
+                requests.append((lat, lon, self.mcd_interface.get_query_URI(slon, record_type, [lat, lon])))
+                self.gui.display_error("preparing strings", len(requests))
 
-                data = add_value_to_dict(data, lat, lon, current_value)
-                print_data(self.gui, slon, lat, lon, current_value)
-                
-        return data
+        return requests
 
+    def collect_data(self, slon, record_type):
+        
+        requests = self.prepare_data(slon, record_type)
+        #Creating mp pool
+        pool = multiprocessing.Pool()
+        result = pool.map(self.download_worker, requests)
+        pool.close()
+        pool.join()
+
+        for item in result:
+            lat, lon, value = item
+            if abs(lat) == 90:
+                for step in np.arange(self.lon_margins[0], self.lon_margins[1]+self.settings_handler.get_setting("LON_STEP"), self.settings_handler.get_setting("LON_STEP")):
+                    self.add_value_to_dict(lat, step, value)
+
+            print(self.data)
+            self.add_value_to_dict(lat, lon, value)
+            
+
+        return self.data
+
+        #data = add_value_to_dict(data, lat, lon, current_value)
+
+    def add_value_to_dict(self, lat, lon, value):
+        if not lat in self.data.keys():
+            self.data[lat] = {}
+            self.data[lat] = {lon: value}
+        else:
+            self.data[lat][lon] = value
+
+    def download_worker(self, data):
+        lat, lon, uri = data
+        current_value = self.mcd_interface.do_direct_query(uri)
+        print(lat, lon, current_value)
+        return (lat, lon, current_value)
 
     def write_database_slon_record(self, record_type, slon, db_dict):
         padded_slon = str(slon).rjust(self.settings_handler.get_setting("RECORDS_FILENAME_NUMBERS_PADDING"), "0")
