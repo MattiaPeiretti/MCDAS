@@ -27,5 +27,8 @@ if __name__ == "__main__":
     modulesHandler = Modules()
     modulesHandler.register_module("Convert Watt to Kelvin", modules.convert_W2K_module)
     modulesHandler.register_module("Convert Kelvin to Watt", modules.convert_K2W_module)
-    modulesHandler.run_module("Convert Watt to Kelvin")
+    modulesHandler.register_module(
+        "Check for faulty values in the dataset",
+        modules.check_for_faulty_values_in_dataset,
+    )
     modulesHandler.print_menu()

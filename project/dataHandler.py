@@ -142,9 +142,17 @@ class dataHandler:
 
             writer.writeheader()
             for row in matrix:
-                writer.writerow({header[i]: row[i] for i in range(len(header))})
+                current_row_dict = {}
 
-    def read_matrix_from_csv(self, csv_file):
+                for count in range(len(header)):
+                    if not len(row) == count:
+                        row.append("")
+                    current_row_dict[header[count]] = row[count]
+                writer.writerow(current_row_dict)
+
+    def read_matrix_from_csv(self, csv_file, has_header=True):
+        if has_header:
+            return np.genfromtxt(csv_file, delimiter=",")[1:]
         return np.genfromtxt(csv_file, delimiter=",")
 
 
