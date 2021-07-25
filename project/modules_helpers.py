@@ -11,13 +11,7 @@ from mcd_interface import MCDInterface
 
 settings_handler = SettingsHandler()
 mcd_interface = MCDInterface(settings_handler.get_setting("MCD_BASELINK"))
-data_hander = dataHandler(
-    "../output/",
-    settings_handler,
-    mcd_interface,
-    constants.LAT_MARGINS,
-    constants.LON_MARGINS,
-)
+data_hander = dataHandler()
 
 
 def load_dataset(dataset_dir):

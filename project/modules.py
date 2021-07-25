@@ -1,21 +1,20 @@
 from dataHandler import dataHandler
-import dataHandler
 from settingsHandler import SettingsHandler
 from mcd_interface import MCDInterface
-from tqdm import tqdm
-
+import dataHandler
 import constants
 import modules_helpers
 
+
+from tqdm import tqdm
+import os
+from tkinter import *
+import tkinter.filedialog
+
+
 settings_handler = SettingsHandler()
 mcd_interface = MCDInterface(settings_handler.get_setting("MCD_BASELINK"))
-data_hander = dataHandler.dataHandler(
-    "../output/",
-    settings_handler,
-    mcd_interface,
-    constants.LAT_MARGINS,
-    constants.LON_MARGINS,
-)
+data_hander = dataHandler.dataHandler()
 
 
 def convert_W2K_module():
@@ -121,8 +120,28 @@ def convert_K2W_module():
 
 
 def check_for_faulty_values_in_dataset():
+    Tk().withdraw()
+
+    record_type = input(
+        "Please insert the record type(MCD Variable, E.G. tsurfmn) that you would like to check: "
+    )
+
+    if not record_type in constants.VALID_RECORD_TYPES:
+        print("That record type is not valid!")
+        return -1
+
+    print(
+        "Please insert the path to the desired record type(MCD Variable, E.G. tsurfmn) that you would like to check: "
+    )
+    record_type_dir_path = tkinter.filedialog.askdirectory() + "/"
+
+    if not os.path.exists(record_type_dir_path):
+        print("Such path does not exist! Please try again.")
+        return
+
     values_to_correct = []
-    dataset = modules_helpers.load_dataset(constants.TSURFMN_DIR)
+
+    dataset = modules_helpers.load_dataset(record_type_dir_path)
     for key, record in tqdm(dataset.items()):
         for count, row in enumerate(record):
             if row[2] == 0:
@@ -146,7 +165,7 @@ def check_for_faulty_values_in_dataset():
                 mcd_interface.do_direct_query(
                     mcd_interface.get_query_URI(
                         slon,
-                        "tsurfmn",
+                        record_type,
                         [lat, lon],
                     )
                 ),
@@ -162,14 +181,14 @@ def check_for_faulty_values_in_dataset():
 
         dataset[value[0]][row_nr] = [value[1], value[2], value[3]]
 
-    table_header = ["lat", "lon", "tsurfmn"]
+    table_header = ["lat", "lon", record_type]
 
     print("Writing corrected files.")
 
     for filename, array in tqdm(dataset.items()):
 
         data_hander.write_matrix_to_csv(
-            "../data/tsurfmn/", filename, array, table_header
+            record_type_dir_path, filename, array, table_header
         )
 
     print("Corrected the following rows:")
