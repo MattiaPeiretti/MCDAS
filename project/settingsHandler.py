@@ -5,19 +5,8 @@
 # Technical consultancy: Marco De Marco
 # ----------------------------------------------------------------
 
-SETTINGS = {
-    "MCD_BASELINK": "http://www-mars.lmd.jussieu.fr/mcd_python/cgi-bin/mcdcgi.py",
-    "RECORDS_FILENAME_NUMBERS_PADDING": 3,
-    # "RECORD_TYPE": "tsurfmn",
-    "RECORD_TYPE": "tsurfmx",  # Database variable
-    "SLON_STEP": 15,  # Solar longitude step 15
-    "LAT_STEP": 90,  # Latitude step 5
-    "LON_STEP": 120,  # Longitude 2.5
-    "REQUEST_RETRY_AMOUNT": 5,  # Amount of retries on request error
-    "REQUEST_RETRY_WAITTIME": 10,  # Delay between requests retries 10 secs
-    "REQUEST_ERROR_CHARACTER": "0",  # Character to return instead if request retries should fail "ERROR"
-    "DATASET_DOWNLOAD_BASE_DIR": "../output/",  # Where the downloaded data gets saved
-}
+import json
+import constants
 
 
 class SettingsHandler:
@@ -32,13 +21,25 @@ class SettingsHandler:
         return SettingsHandler.__instance  # initialized instance..
 
     def __init__(self):
+        self.write_settings_to_file()
+
         self.settings = self.read_settings()
 
     def get_setting(self, setting):
-        if self.settings[setting]:
+        if setting in self.settings:
             return self.settings[setting]
         else:
             return False
 
     def read_settings(self):
-        return SETTINGS
+        with open(constants.SETTINGS_FILE_PATH) as config_file:
+            data = json.load(config_file)
+        self.settings = data
+
+    def update_setting(self, setting, value):
+        self.settings[setting] = value
+        self.write_settings_to_file()
+
+    def write_settings_to_file(self):
+        with open(constants.SETTINGS_FILE_PATH, "w") as config_file:
+            json.dump(self.settings, config_file)
