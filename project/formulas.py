@@ -1,4 +1,4 @@
-import constants
+import project.constants as constants
 
 # Kelvin temp to Watt/m2
 def convert_K2W(k_value):

@@ -1,7 +1,7 @@
-from settingsHandler import SettingsHandler
-from mcd_interface import MCDInterface
-from dataHandler import dataHandler
-import constants
+from project.settingsHandler import SettingsHandler
+from project.mcd_interface import MCDInterface
+from project.dataHandler import dataHandler
+import project.constants as constants
 
 import os
 import numpy as np

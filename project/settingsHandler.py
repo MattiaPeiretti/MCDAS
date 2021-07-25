@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------
 
 import json
-import constants
+import project.constants
 
 
 class SettingsHandler:

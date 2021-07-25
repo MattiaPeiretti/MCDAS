@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import re
 import time
 
-from settingsHandler import SettingsHandler
+from project.settingsHandler import SettingsHandler
 
 
 def find_number_in_string(string):

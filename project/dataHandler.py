@@ -1,5 +1,5 @@
-import constants
-import settingsHandler
+import project.constants as constants
+import project.settingsHandler as settingsHandler
 
 from tqdm import tqdm
 import csv
