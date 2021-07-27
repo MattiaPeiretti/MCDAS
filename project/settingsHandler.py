@@ -21,8 +21,6 @@ class SettingsHandler:
         return SettingsHandler.__instance  # initialized instance..
 
     def __init__(self):
-        self.write_settings_to_file()
-
         self.settings = self.read_settings()
 
     def get_setting(self, setting):
@@ -43,3 +41,8 @@ class SettingsHandler:
     def write_settings_to_file(self):
         with open(constants.SETTINGS_FILE_PATH, "w") as config_file:
             json.dump(self.settings, config_file)
+
+    def get_settings_template_data(self):
+        with open(constants.SETTINGS_TEMPLATE_FILE_PATH) as config_file:
+            data = json.load(config_file)
+        return data

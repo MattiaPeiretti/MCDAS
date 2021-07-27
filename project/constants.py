@@ -10,6 +10,7 @@ DELTA_KELVIN = 273.15
 # ==== SOFTWARE RELATED ====
 
 SETTINGS_FILE_PATH = "settings.json"
+SETTINGS_TEMPLATE_FILE_PATH = "settingsTemplate.json"
 
 # ==== BASE SCI CONSTANTS ====
 

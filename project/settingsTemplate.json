@@ -1,0 +1,54 @@
+
+[
+{
+    "title": "main",
+    "settings": [
+        {
+            "type": "intvalue",
+            "default": 0,
+            "name": "setting 0",
+            "id": "TEST_SETTING"
+        },
+        {
+            "type": "intvalue",
+            "default": 0,
+            "name": "setting 1",
+            "id": "TEST_SETTING2"
+        }
+    ]
+},
+{
+    "title": "Giovanni Giorgio",
+    "settings": [
+        {
+            "type": "intvalue",
+            "default": 0,
+            "name": "setting 0",
+            "id": "TEST_SETTING"
+        },
+        {
+            "type": "intvalue",
+            "default": 0,
+            "name": "setting 1",
+            "id": "TEST_SETTING2"
+        }
+    ]
+},
+{
+    "title": "main",
+    "settings": [
+        {
+            "type": "intvalue",
+            "default": 0,
+            "name": "setting 0",
+            "id": "TEST_SETTING"
+        },
+        {
+            "type": "intvalue",
+            "default": 0,
+            "name": "setting 1",
+            "id": "TEST_SETTING2"
+        }
+    ]
+}
+]

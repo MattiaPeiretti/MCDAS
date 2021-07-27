@@ -19,4 +19,8 @@ STYLES = """
     background-color: white;
 }
 
+QLabel {
+    font-size: 13px;
+}
+
 """
