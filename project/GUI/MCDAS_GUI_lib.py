@@ -4,6 +4,8 @@ from PyQt5.QtCore import *
 from functools import partial
 import os
 
+import project.GUI.custom_widgets as CustomWidgets
+
 
 def parse_css_files(files=[]):
     styles = """"""
