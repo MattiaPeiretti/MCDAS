@@ -2,8 +2,19 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from functools import partial
+import os
 
-from project.GUI.stylesheet import STYLES
+
+def parse_css_files(files=[]):
+    styles = """"""
+    for file in files:
+        if not os.path.isfile(file):
+            print(f"File: {file} does not exist.")
+            continue
+        with open(file, "r") as file_stream:
+            styles += file_stream.read()
+            print(f"Loaded {file}.")
+    return styles
 
 
 class root(QWidget):
@@ -24,7 +35,9 @@ class root(QWidget):
         self.navbar_buttons = []
         self.page_titles = {}
 
-        self.setStyleSheet(STYLES)
+        css_files = [os.path.join(os.path.dirname(__file__), "styles.css")]
+
+        self.setStyleSheet(parse_css_files(css_files))
 
     def update_header(self, index):
         self.page_title_label.setText(self.page_titles[index])
