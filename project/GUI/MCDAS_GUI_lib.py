@@ -35,7 +35,7 @@ class root(QWidget):
         self.navbar_buttons = []
         self.page_titles = {}
 
-        css_files = [os.path.join(os.path.dirname(__file__), "styles.css")]
+        css_files = [os.path.join(os.path.dirname(__file__), "default.css")]
 
         self.setStyleSheet(parse_css_files(css_files))
 

@@ -21,8 +21,9 @@ QLabel {
     font-size: 13px;
 }
 
-#settings_title {
-    font-size: 16px;
+#settings-title {
+    font-size: 14px;
+    color: red;
 }
 
 #SettingsWidgets {
