@@ -45,7 +45,7 @@ class root(QWidget):
         self.page_title_label.setText(self.page_titles[index])
         for count, button in enumerate(self.navbar_buttons):
             if not count == index:
-                button.setStyleSheet("color: black;")
+                button.setStyleSheet("color: white;")
             else:
                 button.setStyleSheet("color: #6495ED;")
 
