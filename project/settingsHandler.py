@@ -21,7 +21,7 @@ class SettingsHandler:
         return SettingsHandler.__instance  # initialized instance..
 
     def __init__(self):
-        self.settings = self.read_settings()
+        self.read_settings()
 
     def get_setting(self, setting):
         if setting in self.settings:
@@ -35,6 +35,8 @@ class SettingsHandler:
         self.settings = data
 
     def update_setting(self, setting, value):
+        self.read_settings()
+        print(setting, value)
         self.settings[setting] = value
         self.write_settings_to_file()
 
