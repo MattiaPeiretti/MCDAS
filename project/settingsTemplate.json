@@ -1,53 +1,53 @@
-
 [
-{
-    "title": "main",
+{       
+    "title": "Setup",
     "settings": [
         {
-            "type": "intvalue",
-            "default": 0,
-            "name": "setting 0",
-            "id": "TEST_SETTING"
+            "type": "input",
+            "default": "http://www-mars.lmd.jussieu.fr/mcd_python/cgi-bin/mcdcgi.py",
+            "name": "Mars Climate Database base URI",
+            "id": "MCD_BASELINK",
+            "desc": "The MCD URI (hyperlink) to which the requests will be send and from which the data will be scraped"
         },
         {
-            "type": "intvalue",
-            "default": 0,
-            "name": "setting 1",
-            "id": "TEST_SETTING2"
+            "type": "input",
+            "default": "../output/",
+            "name": "Download directory.",
+            "id": "DATASET_DOWNLOAD_BASE_DIR",
+            "desc": "The directory in which the downloaded data will be saved."
+        },
+        {
+            "type": "number",
+            "default": 3,
+            "name": "Filename padding amount",
+            "id": "RECORDS_FILENAME_NUMBERS_PADDING",
+            "desc": "The amount of padding (000x.csv) that the download files will be saved with."
         }
     ]
 },
-{
-    "title": "Giovanni Giorgio",
+{       
+    "title": "Other",
     "settings": [
         {
-            "type": "intvalue",
-            "default": 0,
-            "name": "setting 0",
-            "id": "TEST_SETTING"
+            "type": "number",
+            "default": 5,
+            "name": "New attempts after request faliure",
+            "id": "REQUEST_RETRY_AMOUNT",
+            "desc": "Amount of new requestes that the software will send after one faluty request."
         },
         {
-            "type": "intvalue",
-            "default": 0,
-            "name": "setting 1",
-            "id": "TEST_SETTING2"
-        }
-    ]
-},
-{
-    "title": "main",
-    "settings": [
-        {
-            "type": "intvalue",
-            "default": 0,
-            "name": "setting 0",
-            "id": "TEST_SETTING"
+            "type": "number",
+            "default": 10,
+            "name": "New request attempts wait time",
+            "id": "REQUEST_RETRY_WAITTIME",
+            "desc": "Time between new request attemps in seconds."
         },
         {
-            "type": "intvalue",
-            "default": 0,
-            "name": "setting 1",
-            "id": "TEST_SETTING2"
+            "type": "input",
+            "default":"0",
+            "name": "Faulty value to remove automatically.",
+            "id": "REQUEST_ERROR_CHARACTER",
+            "desc": "Some times the MCD responds with a faulty value, the value hereby set will be automatically corrected."
         }
     ]
 }

@@ -1,12 +1,1 @@
-{
-    "MCD_BASELINK": "http://www-mars.lmd.jussieu.fr/mcd_python/cgi-bin/mcdcgi.py",
-    "RECORDS_FILENAME_NUMBERS_PADDING": 3,
-    "RECORD_TYPE": "tsurfmx",
-    "SLON_STEP": 15,
-    "LAT_STEP": 2.5,
-    "LON_STEP": 5,
-    "REQUEST_RETRY_AMOUNT": 5,
-    "REQUEST_RETRY_WAITTIME": 10,
-    "REQUEST_ERROR_CHARACTER": "0",
-    "DATASET_DOWNLOAD_BASE_DIR": "../output/"
-}
+{"MCD_BASELINK": "http://www-mars.lmd.jussieu.fr/mcd_python/cgi-bin/mcdcgi.py", "RECORDS_FILENAME_NUMBERS_PADDING": 3, "RECORD_TYPE": "tsurfmx", "SLON_STEP": 15, "LAT_STEP": 2.5, "LON_STEP": 5, "REQUEST_RETRY_AMOUNT": 5, "REQUEST_RETRY_WAITTIME": 14, "REQUEST_ERROR_CHARACTER": "0", "DATASET_DOWNLOAD_BASE_DIR": "../output/"}
