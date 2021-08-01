@@ -38,8 +38,8 @@ class root(QWidget):
         self.page_titles = {}
 
         css_files = [os.path.join(os.path.dirname(__file__), "default.css")]
-
-        self.setStyleSheet(parse_css_files(css_files))
+        self.styles = parse_css_files(css_files)
+        self.setStyleSheet(self.styles)
 
     def update_header(self, index):
         self.page_title_label.setText(self.page_titles[index])
@@ -70,7 +70,8 @@ class root(QWidget):
 
     def initialize(self, displayDebugBorders=False):
         if displayDebugBorders:
-            self.setStyleSheet("QWidget {border: 1px solid red;}")
+            self.styles += "QWidget {border: 1px solid red!important;}"
+            self.setStyleSheet(self.styles)
 
         self.body = QVBoxLayout()
 
