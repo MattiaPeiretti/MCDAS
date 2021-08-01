@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from functools import partial
 import os
+import glob
 
 import project.GUI.custom_widgets as CustomWidgets
 
@@ -17,6 +18,16 @@ def parse_css_files(files=[]):
             styles += file_stream.read()
             print(f"Loaded {file}.")
     return styles
+
+
+def load_font_files(dirs=[]):
+    for dir_location in dirs:
+        if not os.path.isdir(dir_location):
+            print(f"File: {dir_location} does not exist.")
+            continue
+        for file in glob.glob(dir_location + "*.ttf"):
+            QFontDatabase.addApplicationFont(file)
+            print(f"Loaded {file} font file.")
 
 
 class root(QWidget):
@@ -40,6 +51,9 @@ class root(QWidget):
         css_files = [os.path.join(os.path.dirname(__file__), "default.css")]
         self.styles = parse_css_files(css_files)
         self.setStyleSheet(self.styles)
+
+        fonts_dirs = [os.path.join(os.path.dirname(__file__), "fonts/roboto/")]
+        load_font_files(fonts_dirs)
 
     def update_header(self, index):
         self.page_title_label.setText(self.page_titles[index])
