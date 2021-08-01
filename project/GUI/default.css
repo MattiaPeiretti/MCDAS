@@ -1,6 +1,8 @@
 #NavbarButton {
     border: none;
     color: grey;
+    margin-left: 20px;
+    margin-right: 5px;
 }
 
 #PageHeaderLabel {

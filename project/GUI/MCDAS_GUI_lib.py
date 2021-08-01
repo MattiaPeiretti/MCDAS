@@ -43,6 +43,7 @@ class root(QWidget):
         self.page_title_label = QLabel("Loading...")
         self.page_title_label.setObjectName("PageHeaderLabel")
         self.header.addWidget(self.page_title_label)
+        self.header.addStretch(0)
 
         self.pages_register = {}
         self.navbar_buttons = []
@@ -90,7 +91,6 @@ class root(QWidget):
         self.body = QVBoxLayout()
 
         self.generate_navbar()
-
         self.body.addLayout(self.header)
 
         self.body.addWidget(self.stacked_widget)
