@@ -8,6 +8,61 @@ from project.settingsHandler import SettingsHandler
 settings_handler = SettingsHandler()
 
 
+class HRangeSelector(QWidget):
+    def __init__(self, title, *args, **kwargs):
+        super(HRangeSelector, self).__init__()
+        self.title = title
+        self.build_widget()
+
+    def build_widget(self):
+
+        layout = QHBoxLayout()
+        layout.addWidget(QLabel(self.title))
+        self.begin_value_lineedit = QLineEdit(objectName="coordinates-lineedit")
+        self.begin_value_lineedit.setValidator(QDoubleValidator(self))
+        layout.addWidget(self.begin_value_lineedit)
+        range_layout = QHBoxLayout()
+        to_label = QLabel(" to ")
+        range_layout.addWidget(to_label)
+        self.end_value_lineedit = QLineEdit(objectName="coordinates-lineedit")
+        self.end_value_lineedit.setValidator(QDoubleValidator(self))
+        range_layout.setContentsMargins(0, 0, 0, 0)
+        range_layout.addWidget(self.end_value_lineedit)
+        range_layout_frame = QFrame()
+        range_layout_frame.setLayout(range_layout)
+        range_layout_frame.hide()
+        layout.addWidget(range_layout_frame)
+
+        def update_buttons_config():
+            if range_layout_frame.isHidden():
+                range_layout_frame.show()
+                toggle_range_button.setText("Remove range value")
+            else:
+                range_layout_frame.hide()
+                toggle_range_button.setText("Add range value")
+                self.end_value_lineedit.setText("")
+
+        toggle_range_button = QPushButton(
+            "Add Range Value", clicked=update_buttons_config
+        )
+
+        layout.addWidget(toggle_range_button)
+        layout.addStretch(1)
+
+        self.setLayout(layout)
+
+    def get_value(self):
+        if not self.end_value_lineedit.text() == "":
+            return [
+                float(self.begin_value_lineedit.text()),
+                float(self.end_value_lineedit.text()),
+            ]
+        if self.begin_value_lineedit.text() == "":
+            return False
+
+        return float(self.begin_value_lineedit.text())
+
+
 class DownloadPage(GUI.CustomPage):
     def build(self):
         self.set_page_title("Download from MCD")
@@ -15,27 +70,20 @@ class DownloadPage(GUI.CustomPage):
         coordinates_box = QGroupBox("Coordinates")
         coordinates_main_layout = QVBoxLayout()
 
-        slon_layout = QHBoxLayout()
-        slon_layout.addWidget(QLabel("Solar longitude (0-360) deg:"))
-        slon_begin_value_lineedit = QLineEdit()
-        slon_layout.addWidget(slon_begin_value_lineedit)
-        slon_range_layout = QHBoxLayout()
-        slon_to_label = QLabel(" to ")
-        slon_range_layout.addWidget(slon_to_label)
-        slon_end_value_lineedit = QLineEdit()
-        slon_range_layout.setContentsMargins(0, 0, 0, 0)
-        slon_range_layout.addWidget(slon_end_value_lineedit)
-        slon_range_layout_frame = QFrame()
-        slon_range_layout_frame.setLayout(slon_range_layout)
-        slon_range_layout_frame.hide()
-        slon_layout.addWidget(slon_range_layout_frame)
-        slon_layout.addWidget(
-            QPushButton(
-                "Add Range Value", clicked=lambda: slon_range_layout_frame.show()
-            )
-        )
+        slon_range = HRangeSelector("Solar longitude (0° to 360°):")
+        lat_range = HRangeSelector("Latitude (-90° to 90°) deg:")
+        lon_range = HRangeSelector("Solar longitude (0° to 360°) deg:")
 
-        coordinates_main_layout.addLayout(slon_layout)
+        coordinates_main_layout.addWidget(slon_range)
+        coordinates_main_layout.addWidget(lat_range)
+        coordinates_main_layout.addWidget(lon_range)
+
+        def get_rages_value():
+            print(slon_range.get_value(), lat_range.get_value(), lon_range.get_value())
+
+        coordinates_main_layout.addWidget(
+            QPushButton("Get Values", clicked=get_rages_value)
+        )
         coordinates_box.setLayout(coordinates_main_layout)
         self.page_body.addWidget(coordinates_box)
 
