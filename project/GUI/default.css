@@ -40,6 +40,18 @@ QLineEdit {
     max-width: 200px;
 }
 
+#pageBody QPushButton {
+    background-color: #6495ED;
+    color: black;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 2px;
+}
+
+#pageBody QPushButton:hover {
+    background-color: #9abeff;
+}
+
 
 #separator {
     background: blueviolet;
