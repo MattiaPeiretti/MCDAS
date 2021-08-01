@@ -21,9 +21,19 @@ QLabel {
     font-size: 13px;
 }
 
-#settings-title {
+#settings-title, QGroupBox {
     font-size: 14px;
     color: #6495ED;
+}
+
+QHBoxLayout {
+    margin: 0!important;
+    padding: 0!important;
+    border: none;
+}
+
+QLineEdit {
+    padding: 3px;
 }
 
 #SettingsWidgets {

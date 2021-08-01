@@ -11,7 +11,33 @@ settings_handler = SettingsHandler()
 class DownloadPage(GUI.CustomPage):
     def build(self):
         self.set_page_title("Download from MCD")
-        self.page_body.addWidget(QLabel("This is a custom label."))
+
+        coordinates_box = QGroupBox("Coordinates")
+        coordinates_main_layout = QVBoxLayout()
+
+        slon_layout = QHBoxLayout()
+        slon_layout.addWidget(QLabel("Solar longitude (0-360) deg:"))
+        slon_begin_value_lineedit = QLineEdit()
+        slon_layout.addWidget(slon_begin_value_lineedit)
+        slon_range_layout = QHBoxLayout()
+        slon_to_label = QLabel(" to ")
+        slon_range_layout.addWidget(slon_to_label)
+        slon_end_value_lineedit = QLineEdit()
+        slon_range_layout.setContentsMargins(0, 0, 0, 0)
+        slon_range_layout.addWidget(slon_end_value_lineedit)
+        slon_range_layout_frame = QFrame()
+        slon_range_layout_frame.setLayout(slon_range_layout)
+        slon_range_layout_frame.hide()
+        slon_layout.addWidget(slon_range_layout_frame)
+        slon_layout.addWidget(
+            QPushButton(
+                "Add Range Value", clicked=lambda: slon_range_layout_frame.show()
+            )
+        )
+
+        coordinates_main_layout.addLayout(slon_layout)
+        coordinates_box.setLayout(coordinates_main_layout)
+        self.page_body.addWidget(coordinates_box)
 
 
 class SettingsPage(GUI.CustomPage):
